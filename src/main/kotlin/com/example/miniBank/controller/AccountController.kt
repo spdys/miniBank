@@ -30,7 +30,7 @@ class AccountController(private val accountService: AccountService) {
         return try {
             accountService.closeAccount(accountNumber)
             ResponseEntity.ok().body(null)
-        } catch (e: TransferException) {
+        } catch (e: MiniBankException) {
             ResponseEntity.badRequest().body(
                 FailureResponse(e.message ?: "Couldn't close account.")
             )
@@ -42,7 +42,7 @@ class AccountController(private val accountService: AccountService) {
         return try {
             val result = accountService.transferFunds(request)
             ResponseEntity.ok(TransferFundsResponse(result))
-        } catch (e: TransferException) {
+        } catch (e: MiniBankException) {
             ResponseEntity.badRequest().body(FailureResponse(e.message ?: "Transfer failed."))
         }
     }

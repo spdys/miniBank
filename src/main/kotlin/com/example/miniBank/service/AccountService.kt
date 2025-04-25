@@ -21,7 +21,7 @@ class AccountService(
 ) {
     fun createAccount(request: CreateAccountRequest): AccountResponse {
         val user = userRepository.findById(request.userId)
-            .orElseThrow { UserIdNotFound() }
+            .orElseThrow { UserIdNotFound(request.userId) }
 
         val generatedAccountNumber = "ACC" + (100000..999999).random()
 
@@ -68,7 +68,7 @@ class AccountService(
 
         fun closeAccount(accountNumber: String) {
         val account = accountRepository.findByAccountNumber(accountNumber)
-            ?: throw AccountNotFound()
+            ?: throw AccountNotFound(accountNumber)
 
         account.isActive = false
         accountRepository.save(account)
@@ -77,10 +77,10 @@ class AccountService(
     fun transferFunds(request: TransferFundsRequest): BigDecimal {
         // checking for errors before we begin
         val source = accountRepository.findByAccountNumber(request.sourceAccountNumber)
-            ?: throw SourceNotFound()
+            ?: throw SourceNotFound(request.sourceAccountNumber)
 
         val destination = accountRepository.findByAccountNumber(request.destinationAccountNumber)
-            ?: throw DestinationNotFound()
+            ?: throw DestinationNotFound(request.destinationAccountNumber)
 
         if (source.accountNumber == destination.accountNumber) throw SameAccountException()
         if (!destination.isActive) throw AccountClosed()

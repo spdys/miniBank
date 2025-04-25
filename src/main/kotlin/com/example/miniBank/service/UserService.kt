@@ -29,7 +29,7 @@ class UserService(
 
     fun createOrUpdateKyc(request: CreateOrUpdateKycRequest): KycResponse {
         val user = userRepository.findById(request.userId)
-            .orElseThrow { UserIdNotFound() }
+            .orElseThrow { UserIdNotFound(request.userId) }
 
         val existingKyc = kycRepository.findByUserId(request.userId)
 
@@ -63,7 +63,7 @@ class UserService(
 
     fun getKyc(userId: Long): KycResponse {
         val kyc = kycRepository.findByUserId(userId)
-            ?: throw KycInfoNotFound()
+            ?: throw KycInfoNotFound(userId)
 
         return KycResponse(
             kyc.user.id,
