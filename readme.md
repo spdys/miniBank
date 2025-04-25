@@ -27,12 +27,13 @@
 
 ### services
 - register user (username & password)
-- list accounts
-- create new/multiple accounts
-- close account
-- transfer money to other account
-- get user kyc info
+- log in
 - create or update kyc info
+- get user kyc info
+- create new/multiple accounts
+- list accounts
+- transfer money to other account
+- close account
 
 ### progress
 #### part 1:
