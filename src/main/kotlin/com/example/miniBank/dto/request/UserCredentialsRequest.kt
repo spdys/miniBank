@@ -1,6 +1,6 @@
 package com.example.miniBank.dto.request
 
-data class RegisterUserRequest(
+data class UserCredentialsRequest(
     val username: String,
     val password: String
 )

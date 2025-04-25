@@ -1,31 +1,35 @@
 package com.example.miniBank.service
 
+import com.example.miniBank.KycInfoNotFound
+import com.example.miniBank.UserIdNotFound
 import com.example.miniBank.dto.request.CreateOrUpdateKycRequest
-import com.example.miniBank.dto.request.RegisterUserRequest
+import com.example.miniBank.dto.request.UserCredentialsRequest
 import com.example.miniBank.dto.response.KycResponse
 import com.example.miniBank.entity.KycEntity
 import com.example.miniBank.entity.UserEntity
 import com.example.miniBank.repository.KycRepository
 import com.example.miniBank.repository.UserRepository
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
 class UserService(
     private val userRepository: UserRepository,
-    private val kycRepository: KycRepository
+    private val kycRepository: KycRepository,
+    private val passwordEncoder: PasswordEncoder
 ) {
-    fun registerUser(request: RegisterUserRequest) {
+    fun registerUser(request: UserCredentialsRequest) {
         val user = UserEntity(
             0,
             request.username,
-            request.password
+            passwordEncoder.encode(request.password)
         )
         userRepository.save(user)
     }
 
     fun createOrUpdateKyc(request: CreateOrUpdateKycRequest): KycResponse {
         val user = userRepository.findById(request.userId)
-            .orElseThrow { RuntimeException("User not found.") }
+            .orElseThrow { UserIdNotFound() }
 
         val existingKyc = kycRepository.findByUserId(request.userId)
 
@@ -55,12 +59,11 @@ class UserService(
             savedKyc.dateOfBirth,
             savedKyc.salary
         )
-
     }
 
     fun getKyc(userId: Long): KycResponse {
         val kyc = kycRepository.findByUserId(userId)
-            ?: throw RuntimeException("KYC information not found for user.")
+            ?: throw KycInfoNotFound()
 
         return KycResponse(
             kyc.user.id,

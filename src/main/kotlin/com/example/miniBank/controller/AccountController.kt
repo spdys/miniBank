@@ -1,11 +1,14 @@
 package com.example.miniBank.controller
 
+import com.example.miniBank.*
 import com.example.miniBank.dto.request.CreateAccountRequest
 import com.example.miniBank.dto.request.TransferFundsRequest
 import com.example.miniBank.dto.response.AccountResponse
+import com.example.miniBank.dto.response.FailureResponse
 import com.example.miniBank.dto.response.ListAccountsResponse
 import com.example.miniBank.dto.response.TransferFundsResponse
 import com.example.miniBank.service.AccountService
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -23,12 +26,24 @@ class AccountController(private val accountService: AccountService) {
     }
 
     @PostMapping("{accountNumber}/close")
-    fun closeAccount(@PathVariable accountNumber: String) {
-        accountService.closeAccount(accountNumber)
+    fun closeAccount(@PathVariable accountNumber: String): ResponseEntity<*> {
+        return try {
+            accountService.closeAccount(accountNumber)
+            ResponseEntity.ok().body(null)
+        } catch (e: TransferException) {
+            ResponseEntity.badRequest().body(
+                FailureResponse(e.message ?: "Couldn't close account.")
+            )
+        }
     }
 
     @PostMapping("transfer")
-    fun transferFunds(@RequestBody request: TransferFundsRequest): TransferFundsResponse{
-        return accountService.transferFunds(request)
+    fun transferFunds(@RequestBody request: TransferFundsRequest): ResponseEntity<*> {
+        return try {
+            val result = accountService.transferFunds(request)
+            ResponseEntity.ok(TransferFundsResponse(result))
+        } catch (e: TransferException) {
+            ResponseEntity.badRequest().body(FailureResponse(e.message ?: "Transfer failed."))
+        }
     }
 }

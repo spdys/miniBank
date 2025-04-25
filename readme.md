@@ -2,9 +2,7 @@
 
 `src/main/kotlin/com.example.miniBank` is where all the packages are
 
-`config` package is for 
-- security config (turned all security off until part 2)
-- exception config (i wanted runtime exceptions, if any, to print in the response schema)
+`authentication` = for jwt authentication to provide security
 
 `controller` → `service` (→ `dtos`) → `repository` → `entity`
 
@@ -37,6 +35,7 @@
 - create or update kyc info
 
 ### progress
+#### part 1:
 - [x] spring boot setup
 - [x] define structure
 - [x] database setup
@@ -46,6 +45,18 @@
 - [x] controllers
 - [x] test in postman
 - ALL DONE!!!!!!!
+
+#### part 2:
+- [x] as a user, i can log in and get jwt token
+- as a developer, i can test:
+  - [ ] user registration endpoint
+  - [ ] multiple account creation
+  - [ ] reading a list of accounts
+  - [ ] user create profile
+  - [ ] user update profile
+  - [ ] user read profile
+  - [ ] closing a user account
+  - [ ] transferring money to another account
 
 ### more notes for understanding
 

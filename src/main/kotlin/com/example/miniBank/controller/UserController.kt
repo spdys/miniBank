@@ -1,7 +1,7 @@
 package com.example.miniBank.controller
 
 import com.example.miniBank.dto.request.CreateOrUpdateKycRequest
-import com.example.miniBank.dto.request.RegisterUserRequest
+import com.example.miniBank.dto.request.UserCredentialsRequest
 import com.example.miniBank.dto.response.KycResponse
 import com.example.miniBank.service.UserService
 import org.springframework.web.bind.annotation.*
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*
 class UserController(private val userService: UserService) {
 
     @PostMapping("/register")
-    fun registerUser(@RequestBody request: RegisterUserRequest) {
+    fun registerUser(@RequestBody request: UserCredentialsRequest) {
         userService.registerUser(request)
     }
 
