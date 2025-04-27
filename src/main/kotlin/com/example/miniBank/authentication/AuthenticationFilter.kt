@@ -1,4 +1,4 @@
-package com.example.miniBank.authentication.jwt
+package com.example.miniBank.authentication
 
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.*
@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
-class JwtAuthenticationFilter(
-    private val jwtService: JwtService,
+class AuthenticationFilter(
+    private val authenticationService: AuthenticationService,
     private val userDetailsService: UserDetailsService
 ) : OncePerRequestFilter() {
 
@@ -27,11 +27,11 @@ class JwtAuthenticationFilter(
         }
 
         val token = authHeader.substring(7)
-        val username = jwtService.extractUsername(token)
+        val username = authenticationService.extractUsername(token)
 
         if (SecurityContextHolder.getContext().authentication == null) {
             val userDetails = userDetailsService.loadUserByUsername(username)
-            if (jwtService.isTokenValid(token, userDetails.username)) {
+            if (authenticationService.isTokenValid(token, userDetails.username)) {
                 val authToken = UsernamePasswordAuthenticationToken(
                     userDetails, null, userDetails.authorities
                 )

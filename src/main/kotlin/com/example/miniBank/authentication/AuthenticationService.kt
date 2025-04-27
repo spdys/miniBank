@@ -1,4 +1,4 @@
-package com.example.miniBank.authentication.jwt
+package com.example.miniBank.authentication
 
 import io.jsonwebtoken.*
 import io.jsonwebtoken.security.Keys
@@ -7,7 +7,7 @@ import java.util.*
 import javax.crypto.SecretKey
 
 @Component
-class JwtService {
+class AuthenticationService {
 
     private val secretKey: SecretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256)
     private val expirationMs: Long = 1000 * 60 * 60  // milliseconds * seconds * minutes = 1 hour

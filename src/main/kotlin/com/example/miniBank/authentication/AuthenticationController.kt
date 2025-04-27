@@ -1,4 +1,4 @@
-package com.example.miniBank.authentication.jwt
+package com.example.miniBank.authentication
 
 import com.example.miniBank.dto.request.UserCredentialsRequest
 import com.example.miniBank.dto.response.FailureResponse
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*
 class AuthenticationController(
     private val authenticationManager: AuthenticationManager,
     private val userDetailsService: UserDetailsService,
-    private val jwtService: JwtService
+    private val authenticationService: AuthenticationService
 ) {
 
     @PostMapping("/login")
@@ -26,7 +26,7 @@ class AuthenticationController(
 
             if (authentication.isAuthenticated) {
                 val userDetails = userDetailsService.loadUserByUsername(authRequest.username)
-                val token = jwtService.generateToken(userDetails.username)
+                val token = authenticationService.generateToken(userDetails.username)
                 ResponseEntity.ok(LoginResponse(token))
             } else {
                 throw UsernameNotFoundException("Invalid user request!")

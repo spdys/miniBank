@@ -1,6 +1,6 @@
 package com.example.miniBank
 
-open class MiniBankException(message: String) : RuntimeException(message)
+open class MiniBankException(message: String): RuntimeException(message)
 
 class AccountNotFound(accountNumber: String): MiniBankException("Account $accountNumber not found.")
 class SourceNotFound(accountNumber: String): MiniBankException("Source account $accountNumber not found.")

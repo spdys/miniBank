@@ -12,7 +12,6 @@ class UserEntity(
     var username: String,
     var password: String,
 
-    // had var kyc here but moved it so KycEntity owns the relationship
 ) {
     constructor(): this(
         0,

@@ -1,6 +1,5 @@
 package com.example.miniBank.authentication
 
-import com.example.miniBank.authentication.jwt.JwtAuthenticationFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.*
@@ -18,7 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 class SecurityConfig(
-    private val jwtAuthFilter: JwtAuthenticationFilter,
+    private val jwtAuthFilter: AuthenticationFilter,
     private val userDetailsService: UserDetailsService
 ) {
 
