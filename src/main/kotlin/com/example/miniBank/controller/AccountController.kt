@@ -16,8 +16,14 @@ import org.springframework.web.bind.annotation.*
 class AccountController(private val accountService: AccountService) {
 
     @PostMapping()
-    fun createAccount(@RequestBody request: CreateAccountRequest): AccountResponse {
-        return accountService.createAccount(request)
+    fun createAccount(@RequestBody request: CreateAccountRequest): ResponseEntity<*> {
+        return try {
+            ResponseEntity.ok().body(accountService.createAccount(request))
+        } catch (e: MiniBankException) {
+            ResponseEntity.badRequest().body(
+                FailureResponse(e.message ?: "Couldn't create account.")
+            )
+        }
     }
 
     @GetMapping()
