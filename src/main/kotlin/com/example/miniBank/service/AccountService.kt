@@ -5,6 +5,7 @@ import com.example.miniBank.dto.request.CreateAccountRequest
 import com.example.miniBank.dto.request.TransferFundsRequest
 import com.example.miniBank.dto.response.AccountResponse
 import com.example.miniBank.dto.response.ListAccountsResponse
+import com.example.miniBank.dto.response.TransferFundsResponse
 import com.example.miniBank.entity.AccountEntity
 import com.example.miniBank.entity.TransactionEntity
 import com.example.miniBank.repository.AccountRepository
@@ -74,7 +75,7 @@ class AccountService(
         accountRepository.save(account)
     }
 
-    fun transferFunds(request: TransferFundsRequest): BigDecimal {
+    fun transferFunds(request: TransferFundsRequest): TransferFundsResponse {
         // checking for errors before we begin
         val source = accountRepository.findByAccountNumber(request.sourceAccountNumber)
             ?: throw SourceNotFound(request.sourceAccountNumber)
@@ -105,6 +106,6 @@ class AccountService(
         transactionRepository.save(transaction)
 
 
-        return source.balance
+        return TransferFundsResponse(source.balance)
     }
 }
