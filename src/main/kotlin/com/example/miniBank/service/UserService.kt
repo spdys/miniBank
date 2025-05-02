@@ -2,6 +2,8 @@ package com.example.miniBank.service
 
 import com.example.miniBank.KycInfoNotFound
 import com.example.miniBank.UserIdNotFound
+import com.example.miniBank.UsernameAlreadyExistsException
+import com.example.miniBank.InvalidPasswordException
 import com.example.miniBank.dto.request.CreateOrUpdateKycRequest
 import com.example.miniBank.dto.request.UserCredentialsRequest
 import com.example.miniBank.dto.response.KycResponse
@@ -18,12 +20,23 @@ class UserService(
     private val kycRepository: KycRepository,
     private val passwordEncoder: PasswordEncoder
 ) {
+
     fun registerUser(request: UserCredentialsRequest) {
+        if (userRepository.findByUsername(request.username) != null)
+            throw UsernameAlreadyExistsException()
+        if (request.password.length < 6)
+            throw InvalidPasswordException("Password must be at least 6 characters long.")
+        if (!request.password.any { it.isUpperCase() })
+            throw InvalidPasswordException("Password must contain at least one uppercase letter.")
+        if (!request.password.any { it.isDigit() })
+            throw InvalidPasswordException("Password must contain at least one number.")
+
         val user = UserEntity(
             0,
             request.username,
             passwordEncoder.encode(request.password)
         )
+
         userRepository.save(user)
     }
 
@@ -40,6 +53,7 @@ class UserService(
                 lastName = request.lastName
                 dateOfBirth = request.dateOfBirth
                 salary = request.salary
+
             } // else if null, create new
                 ?: KycEntity(
                     0,

@@ -14,3 +14,5 @@ class NotNonNegative: MiniBankException("Transfer amount must be greater than ze
 
 class UserIdNotFound(userId: Long): MiniBankException("User ID $userId not found.")
 class KycInfoNotFound(userId: Long): MiniBankException("KYC info for user ID $userId not found.")
+class UsernameAlreadyExistsException(): MiniBankException("Username already exists.")
+class InvalidPasswordException(reason: String): MiniBankException("Invalid password: $reason")
